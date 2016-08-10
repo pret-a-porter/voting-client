@@ -67,4 +67,41 @@ describe('reducer', () => {
     }));
   });
 
+  it('обрабатывает VOTE с помощью назначения hasVoted', () => {
+    const state = fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+        tally: {Trainspotting: 1}
+      }
+    });
+    const action = {type: 'VOTE', entry: 'Trainspotting'};
+    const nextState = reducer(state, action);
+
+    expect(nextState).to.equal(fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+        tally: {Trainspotting: 1}
+      },
+      hasVoted: 'Trainspotting'
+    }));
+  });
+
+  it('в случае неправильной записи не назначает hasVoted для VOTE', () => {
+    const state = fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+        tally: {Trainspotting: 1}
+      }
+    });
+    const action = {type: 'VOTE', entry: 'Sunshine'};
+    const nextState = reducer(state, action);
+
+    expect(nextState).to.equal(fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+        tally: {Trainspotting: 1}
+      }
+    }));
+  });
+
 });
